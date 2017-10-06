@@ -1,9 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Content, Text, Form, Item, Input, Label, Button } from 'native-base';
+import { Content, Text, Form, Item, Input, Label, Button, Spinner } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
 class LoginFormView extends React.Component{
+    componentDidUpdate(){
+        if(this.props.user){
+            Actions.main();
+        }
+    }
     login(){
         const { email, password } = this.props;
         this.props.loginUser({email, password});
@@ -16,9 +22,16 @@ class LoginFormView extends React.Component{
         this.props.passwordChanged(text);
     }
 
+    renderSpinnerOrButton(){
+        return this.props.isLoading ?
+            <Spinner size="large"/> : 
+            (<Button full onPress={() => this.login()}>
+                <Text>Login</Text>
+            </Button>);        
+    }
     render(){
         return (
-            <Content style={styles.wrapper}>
+            <Content>
                 <Form>
                     <Item floatingLabel>
                         <Label>Username</Label>
@@ -31,11 +44,10 @@ class LoginFormView extends React.Component{
                             onChangeText={this.changePasswordName.bind(this)} 
                             value={this.props.password}/>
                     </Item>
+                    <Text style={{ color: 'red', textAlign: 'center', marginTop: 20 }}>{this.props.error}</Text>
                     <Item style={styles.itemButton}>
                         <Content>
-                            <Button full onPress={() => this.login()}>
-                                <Text>Login</Text>
-                            </Button>
+                            {this.renderSpinnerOrButton()}
                         </Content>
                     </Item>
                 </Form>
@@ -49,16 +61,16 @@ const styles = {
         borderBottomWidth: 0, 
         marginTop: 30, 
         marginLeft: 0
-    },
-    wrapper: {
-        marginTop: 20
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         email: state.auth.email,
-        password: state.auth.password
+        password: state.auth.password,
+        error: state.auth.error,
+        isLoading: state.auth.isLoading,
+        user: state.auth.user
     }
 }
 

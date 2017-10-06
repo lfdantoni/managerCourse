@@ -15,7 +15,7 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import firebase from 'firebase';
-import {LoginForm} from './components';
+import { RouterComponent } from './Router'
 
 
 export default class App extends Component<{}> {
@@ -32,19 +32,12 @@ export default class App extends Component<{}> {
     firebase.initializeApp(config);
   }
   render() {
+    let store = createStore(reducers, {}, applyMiddleware(ReduxThunk))
+
     return (
-      <Provider store={createStore(reducers, {}, applyMiddleware(ReduxThunk))}>
-        <LoginForm />
+      <Provider store={store} key={Date.now()}>
+        <RouterComponent />
       </Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
-});
