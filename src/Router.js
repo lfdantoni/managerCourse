@@ -7,7 +7,8 @@ const RouterComponent = () => {
         <Router>
             <Scene key="root" hideNavBar>
                 <Scene key="auth">
-                    <Scene key="login" component={LoginForm} title="Please Login"/>
+                    <Scene key="login" component={LoginForm} title="Please Login" 
+                    onRight={() => Actions.employeeList()} rightTitle="Test"/>
                 </Scene>
                 <Scene key="main">
                     <Scene 

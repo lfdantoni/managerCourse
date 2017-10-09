@@ -1,6 +1,8 @@
 import {EMAIL_CHANGED, PASSWORD_CHANGED, LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_USER} from './types';
 import firebase from 'firebase';
 
+export * from './EmployeeActions';
+
 export const emailChanged = (text) => {
     return {
         type: EMAIL_CHANGED,
